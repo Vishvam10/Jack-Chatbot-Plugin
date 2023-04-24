@@ -27,6 +27,8 @@
   --app-default-box-shadow: rgba(75, 77, 80, 0.2) 0px 8px 24px;
   --app-default-border: 1px solid var(--app-color-grey-light-2);
   --app-default-sanserif-font: Arial, Helvetica, sans-serif;
+
+  --app-default-transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
 html {
@@ -51,7 +53,7 @@ a {
   text-decoration: none !important;
   list-style: none;
   font-size: 1.6rem;
-  transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  transition: var(--app-default-transition);
 }
 
 a:hover {
@@ -67,7 +69,7 @@ input::-webkit-input-placeholder {
 }
 
 button {
-  transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  transition: var(--app-default-transition);
   cursor: pointer;
 }
 
@@ -108,7 +110,7 @@ svg > * {
 .ionicon {
   width: 24px !important;
   height: 24px !important;
-  transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  transition: var(--app-default-transition);
   cursor: pointer;
 }
 
@@ -185,7 +187,7 @@ svg > * {
 }
 
 .sender_message {
-  background-color: var(--app-color-primary);
+  background-color: var(--app-color-black);
   color: var(--app-color-white);
   justify-content: right;
   margin: 1rem 1rem 0rem 6rem;
@@ -248,3 +250,66 @@ svg > * {
   stroke: var(--app-color-grey-light-1);
 }
 
+#app_login_area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login_signup_form {
+  margin: 2rem;
+  width: 100%;
+  height: 64%;
+}
+
+.app_form_label {
+  font-family: var(--app-default-sanserif-font);
+  font-size: 12px;
+  color: var(--app-color-grey-light-1);
+}
+
+.app_form_input {
+  padding: 1rem 1rem 1.2rem 1rem;
+  font-family: var(--app-default-sanserif-font);
+  appearance: none;
+  height: 1.8rem;
+  width: 90%;
+  margin: 1rem 0rem 1rem 0rem;
+  border-radius: 0.6rem;
+  background-color: var(--app-color-white);
+  border: 1px solid var(--app-color-grey-light-1);
+  font-size: 1.6rem;
+  color: var(--app-color-grey);
+  outline: 0px !important;
+}
+
+.app_standard_button {
+  background-color: var(--app-color-black);
+  font-size: 1.2rem;
+  color: var(--app-color-white);
+  font-weight: bold;
+  border: none;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  width: 99%;
+  height: 4.2rem;
+  transition: var(--app-default-transition);
+  margin: 2rem 0rem 0rem 0rem;
+}
+
+.app_standard_button:hover {
+  transform: scale(1.02);
+}
+
+.app_standard_button:active {
+  transform: scale(1) !important;
+}
+
+.hide {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}

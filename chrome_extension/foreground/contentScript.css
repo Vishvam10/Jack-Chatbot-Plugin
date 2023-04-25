@@ -1,259 +1,297 @@
 :root {
-    --app-color-primary: #5000ffb5;
+    --jack-color-primary: #5000ffb5 !important;
 
-    --app-color-success: #5ec576;
-    --app-color-success-darker: #399e66;
-    --app-color-warning: #ffcb03;
-    --app-color-warning-darker: #eaac00;
-    --app-color-danger: #ff585f;
-    --app-color-danger-darker: #fd424b;
+    --jack-color-success: #5ec576 !important;
+    --jack-color-success-darker: #399e66 !important;
+    --jack-color-warning: #ffcb03 !important;
+    --jack-color-warning-darker: #eaac00 !important;
+    --jack-color-danger: #ff585f !important;
+    --jack-color-danger-darker: #fd424b !important;
 
-    --app-color-grey-light-4: #fcfcfc;
-    --app-color-grey-light-3: #f2f2f2;
-    --app-color-grey-light-2: #d0d0d0;
-    --app-color-grey-light-1: #9c9c9c;
-    --app-color-grey: #808080;
-    --app-color-grey-dark-1: #6c6c6c;
-    --app-color-grey-dark-2: #444444;
-    --app-color-grey-dark-3: #2d2c2c;
-    --app-color-grey-dark-4: #141313;
-    --app-color-black: #000000;
-    --app-color-white: #ffffff;
+    --jack-color-grey-light-4: #fcfcfc !important;
+    --jack-color-grey-light-3: #f2f2f2 !important;
+    --jack-color-grey-light-2: #d0d0d0 !important;
+    --jack-color-grey-light-1: #9c9c9c !important;
+    --jack-color-grey: #808080 !important;
+    --jack-color-grey-dark-1: #6c6c6c !important;
+    --jack-color-grey-dark-2: #444444 !important;
+    --jack-color-grey-dark-3: #2d2c2c !important;
+    --jack-color-grey-dark-4: #141313 !important;
+    --jack-color-black: #000000 !important;
+    --jack-color-white: #ffffff !important;
 
-    --app-default-background: #f9fafb;
+    --jack-default-background: #f9fafb !important;
 
-    --app-default-box-shadow-light: rgba(120, 123, 127, 0.2) 0px 8px 16px;
-    --app-default-box-shadow: rgba(75, 77, 80, 0.2) 0px 8px 24px;
-    --app-default-border: 1px solid var(--app-color-grey-light-2);
-    --app-default-sanserif-font: Arial, Helvetica, sans-serif;
+    --jack-default-box-shadow-light: rgba(120, 123, 127, 0.2) 0px 8px 16px !important;
+    --jack-default-box-shadow: rgba(75, 77, 80, 0.2) 0px 8px 24px !important;
+    --jack-default-border: 1px solid var(--jack-color-grey-light-2) !important;
+    --jack-default-sanserif-font: Arial, Helvetica, sans-serif !important;
 
-    --app-default-transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    --jack-default-transition: all 0.1s cubic-bezier(0.445, 0.05, 0.55, 0.95) !important;
 }
+
 
 .ionicon {
     width: 24px !important;
     height: 24px !important;
-    transition: var(--app-default-transition);
-    cursor: pointer;
-    fill: none;
+    transition: var(--jack-default-transition) !important;
+    cursor: pointer !important;
+    fill: none !important;
+    stroke: var(--jack-color-grey-light-1) !important;
 }
 
 .ionicon:hover {
-    transform: scale(1.05);
+    transform: scale(1.05) !important;
 }
 
 .ionicon:active {
-    transform: scale(1);
+    transform: scale(1) !important;
 }
 
-.app_chat_input_container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    position: absolute;
-    bottom: 10px;
-    margin: 20px 0px 10px 0px;
-    width: 90%;
+.jack_chat_input_container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    position: absolute !important;
+    bottom: 10px !important;
+    margin: 20px 0px 10px 0px !important;
+    width: 90% !important;
 }
 
-#app {
+#jack_app {
     width: 320px;
-    height: 520px;
-    background-color: var(--app-color-white);
-    box-shadow: var(--app-default-box-shadow);
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    border-radius: 12px;
-    padding: 20px;
-    z-index: 10000000000;
-    position: fixed;
+    height: 520px;  
+    background-color: var(--jack-color-white) !important;
+    box-shadow: var(--jack-default-box-shadow) !important;
+    position: absolute !important;
+    bottom: 40px !important;
+    left: 40px !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    z-index: 10000000000 !important;
+    position: fixed !important;
+    transition: all 0.32s cubic-bezier(0.445, 0.05, 0.55, 0.95) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
-.app_chat_header {
-    width: 320px;
-    /* background-color: var(--app-color-black); */
-    border-bottom: var(--app-default-border);
-    color: var(--app-color-grey-light-1);
-    padding: 20px 10px 20px 30px;
-    border-radius: 12px 12px 0px 0px;
-    font-weight: bold;
-    position: relative;
-    top: -20px;
-    left: 0px;
-    margin: 0px 0px -10px -20px;
+.jack_minimized {
+    height: 22px !important;
+    width: 22px !important;
 }
 
-#app_chat_messages_container {
-    height: 340px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    margin: 10px 0px 0px 0px;
+.jack_chat_header {
+    width: 100% !important;
+    height: 50px !important;
+    background-color: var(--jack-color-white) !important;
+    border-bottom: var(--jack-default-border) !important;
+    color: var(--jack-color-grey-light-1) !important;
+    padding: 20px 10px 20px 30px !important;
+    border-radius: 12px 12px 0px 0px !important;
+    font-weight: bold !important;
+    position: absolute !important;
+    top: 0px !important;
+    left: 0px !important;
+    margin: 0px 0px 0px 0px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
-.app_chat_message_container {
-    margin: 10px 0px 0px 0px;
+.jack_chat_header_heading {
+    margin: 20px 0px 20px 36px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
 }
 
-.app_chat_message_box {
-    background-color: var(--app-default-background);
-    padding: 10px 10px 1px 10px;
-    border-radius: 12px;
-    border: var(--app-default-border);
-    color: #646b72;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    font-size: 14px;
-    width: fit-content;
-    height: auto;
-    margin: 10px 10px 10px 10px;
+#minimizeBtn {
+    margin: 0px 32px -7px 0px !important;
+}
+
+#jack_chat_messages_container {
+    height: 340px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    margin: 40px 0px 20px 0px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
+}
+
+.jack_chat_message_container {
+    margin: 1px 0px 0px 0px !important;
+}
+
+.jack_chat_message_box {
+    background-color: var(--jack-default-background) !important;
+    padding: 0px 10px 0px 10px !important;
+    border-radius: 12px !important;
+    border: var(--jack-default-border) !important;
+    color: #646b72 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 14px !important;
+    width: fit-content !important;
+    min-height: 40px !important;
+    height: auto !important;
+    margin: 10px 10px 10px 10px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
 .sender_message {
-    background-color: var(--app-color-black);
-    color: var(--app-color-white);
-    justify-content: right;
-    /* margin: 10px 10px 0px 60px; */
+    background-color: var(--jack-color-black) !important;
+    color: var(--jack-color-white) !important;
+    justify-content: right !important;
+    /* margin: 10px 10px 0px 60px !important; */
+    
 }
 
 .sender_time {
     /* margin: 2px 0px 16px 61px !important; */
 }
 
-.app_chat_message_time {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin: -7px 0px 20px 15px;
-    font-size: 10px;
-    color: var(--app-color-grey-light-1);
+.jack_chat_message_time {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: -12px 0px 0px 15px !important;
+    font-size: 10px !important;
+    color: var(--jack-color-grey-light-1) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
-.app_chat_sender_image {
-    height: 32px;
-    width: 32px;
-    border-radius: 100px;
-    background-color: black;
+.jack_chat_sender_image {
+    height: 32px !important;
+    width: 32px !important;
+    border-radius: 100px !important;
+    background-color: black !important;
 }
 
-.app_input_message_wrapper_text {
-    min-height: 12px;
-    max-height: 54px;
-    width: 100%;
-    align-content: center;
-    outline: none;
-    overflow: hidden;
-    color: var(--app-color-grey);
+.jack_input_message_wrapper_text {
+    min-height: 12px !important;
+    max-height: 54px !important;
+    width: 100% !important;
+    align-content: center !important;
+    outline: none !important;
+    overflow: hidden !important;
+    color: var(--jack-color-grey) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
-.app_input_message_wrapper {
-    width: 260px;
-    border: var(--app-default-border);
-    border-radius: 12px;
-    background-color: var(--app-default-background);
-    padding: 14px;
-    max-height: 50px;
+.jack_input_message_wrapper {
+    width: 260px !important;
+    border: var(--jack-default-border) !important;
+    border-radius: 12px !important;
+    background-color: var(--jack-default-background) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
+    padding: 14px !important;
+    max-height: 50px !important;
 }
 
-.app_chat_input {
-    width: 80%;
-    max-height: 40px;
-    border-radius: 4px;
-    border: var(--app-default-border);
-    outline: none;
-    padding: 10px;
-    font-size: 14px;
-    color: var(--app-color-grey-dark-1);
-    line-height: 19px;
+.jack_chat_input {
+    width: 80% !important;
+    max-height: 40px !important;
+    border-radius: 4px !important;
+    border: var(--jack-default-border) !important;
+    outline: none !important;
+    padding: 10px !important;
+    font-size: 14px !important;
+    color: var(--jack-color-grey-dark-1) !important;
+    line-height: 19px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
 #sendBtn {
-    margin: 0px 0px 0px 10px;
-    stroke: var(--app-color-grey-light-1);
+    margin: 0px 0px 0px 10px !important;
+    stroke: var(--jack-color-grey-light-1) !important;
 }
 
-#app_login_area {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#jack_login_area {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 
 .login_signup_form {
-    margin: 20px;
-    width: 100%;
-    height: 64%;
+    margin: 20px !important;
+    width: 100% !important;
+    height: 64% !important;
 }
 
-.app_form_label {
-    font-family: var(--app-default-sanserif-font);
-    font-size: 12px;
-    color: var(--app-color-grey-light-1);
+.jack_form_label {
+    font-family: var(--jack-default-sanserif-font) !important;
+    font-size: 12px !important;
+    color: var(--jack-color-grey-light-1) !important;
 }
 
-.app_form_input {
-    padding: 10px 10px 12px 10px;
-    font-family: var(--app-default-sanserif-font);
-    appearance: none;
-    height: 32px;
-    width: 90%;
-    margin: 10px 0px 10px 0px;
-    border-radius: 6px;
-    background-color: var(--app-color-white);
-    border: 1px solid var(--app-color-grey-light-1);
-    font-size: 16px;
-    color: var(--app-color-grey);
+.jack_form_input {
+    padding: 10px 10px 12px 10px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
+    appearance: none !important;
+    height: 32px !important;
+    width: 90% !important;
+    margin: 10px 0px 10px 0px !important;
+    border-radius: 6px !important;
+    background-color: var(--jack-color-white) !important;
+    border: 1px solid var(--jack-color-grey-light-1) !important;
+    font-size: 16px !important;
+    color: var(--jack-color-grey) !important;
     outline: 0px !important;
 }
 
-.app_standard_button {
-    background-color: var(--app-color-black);
-    font-size: 12px;
-    color: var(--app-color-white);
-    font-weight: bold;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    width: 99%;
-    height: 42px;
-    transition: var(--app-default-transition);
-    margin: 20px 0px 0px 0px;
+.jack_standard_button {
+    background-color: var(--jack-color-black) !important;
+    font-size: 12px !important;
+    color: var(--jack-color-white) !important;
+    font-weight: bold !important;
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    width: 99% !important;
+    height: 42px !important;
+    transition: var(--jack-default-transition) !important;
+    margin: 20px 0px 0px 0px !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
-.app_standard_button:hover {
-    transform: scale(1.02);
+.jack_standard_button:hover {
+    transform: scale(1.02) !important;
 }
 
-.app_standard_button:active {
+.jack_standard_button:active {
     transform: scale(1) !important;
 }
 
 .login_signup_switch_text {
-    font-size: 12px;
-    color: var(--app-color-grey);
+    font-size: 12px !important;
+    color: var(--jack-color-grey) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
 }
 
 #loginSignupSwitchBtn {
-    color: var(--app-color-black);
-    cursor: pointer;
-    transition: var(--app-default-transition);
+    color: var(--jack-color-black) !important;
+    font-family: var(--jack-default-sanserif-font) !important;
+    cursor: pointer !important;
+    transition: var(--jack-default-transition) !important;
 }
 
 #loginSignupSwitchBtn:hover {
-    transform: scale(1.05);
+    transform: scale(1.05) !important;
 }
 
 #loginSignupSwitchBtn:active {
     transform: scale(1) !important;
 }
 
-.hide {
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+.jack_hide {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }

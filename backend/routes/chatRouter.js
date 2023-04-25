@@ -31,9 +31,6 @@ router.post("/", async (req, res) => {
         return res.status(400).json({ error: "Prompt or domain is empty" });
     }
 
-
-    // const m = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly. This AI assistant answers queries specific to https://niituniversity.in";
-
     const randomIndex = Math.floor(Math.random() * responses.length);
     const response = responses[randomIndex];
 
@@ -49,20 +46,16 @@ router.post("/", async (req, res) => {
         if (chatDataIndex === -1) {
             user.chatData.push({ domain, chats: [] }); 
         }
-        chatDataIndex = user.chatData.findIndex((chatData) => chatData.domain === domain);
         
-        // console.log(user.chatData[chatDataIndex])
+        chatDataIndex = user.chatData.findIndex((chatData) => chatData.domain === domain);
         user.chatData[chatDataIndex].chats.push({ prompt, response });
         
-        // Save the updated user object to the database
         await user.save();
-        
-        // Return the updated user object as the response
         res.json(user);
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: "Server error" });
     }
 
 });

@@ -1,42 +1,18 @@
-// (async () => {
-
-//     // window.chats = [];
-  
-//     console.log("loaded contentscript ...");
-    
-//     chrome.runtime.onMessage.addListener(
-//       function(request, sender, sendResponse) {
-//         console.log("message : ", request, sender)
-  
-//         if(request.from == "popup") {
-//           if(request.message == "app_init") {
-//             init()
-//           }
-//         }
-  
-//       }
-//     );
-  
-
-// })();
-
 var rootElement;
 var BASE_API_URL
 
 
 function init() {
+
     console.log("init ...")
     
     BASE_API_URL = "http://127.0.0.1:5000/api";
-    OPENAI_API_KEY = "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";
     
     rootElement = document.createElement("div");
-    rootElement.id = "app";
+    rootElement.id = "jack_app";
     document.body.appendChild(rootElement);
     
     console.log("DOM check : ", rootElement);
-
-    
 
     const token = localStorage.getItem("jack_auth_token");
     console.log("token : ", token);
@@ -55,16 +31,16 @@ function init() {
 
 function renderLoginComponent() {
     const markup = `
-        <div id="app_login_area">
+        <div id="jack_login_area">
             <form id="userLoginForm" class="login_signup_form">
                 <h3>Login</h3>
                 <div>
-                    <label for="email" class="app_form_label">Email</label>
-                    <input type="email" id="email"  name="email" class="app_form_input inp_email" placeholder="Enter your email ID">
-                    <label for="password" class="app_form_label">Password</label>
-                    <input type="password" id="password" name="password" class="app_form_input inp_password" placeholder="Enter your password">
+                    <label for="email" class="jack_form_label">Email</label>
+                    <input type="email" id="email"  name="email" class="jack_form_input inp_email" placeholder="Enter your email ID">
+                    <label for="password" class="jack_form_label">Password</label>
+                    <input type="password" id="password" name="password" class="jack_form_input inp_password" placeholder="Enter your password">
                 </div>
-                <button type="button" class="app_standard_button" id="loginBtn">Login</button>
+                <button type="button" class="jack_standard_button" id="loginBtn">Login</button>
                 <p class="login_signup_switch_text">Don't have an account ? <span id="loginSignupSwitchBtn">Create one</span></p>
             </form>
         </div>
@@ -86,18 +62,18 @@ function renderLoginComponent() {
 
 function renderSignupComponent() {
     const markup = `
-        <div id="app_signup_area">
+        <div id="jack_signup_area">
             <form id="userSignupForm">
                 <h3>Sign Up</h3>
                 <div>
-                    <label for="username" class="app_form_label">Username</label>
-                    <input type="username" id="username" name="username" class="app_form_input inp_username" placeholder="Enter your email ID">
-                    <label for="email" class="app_form_label">Email</label>
-                    <input type="email" id="email" name="email" class="app_form_input inp_email" placeholder="Enter your email ID">
-                    <label for="password" class="app_form_label">Password</label>
-                    <input type="password" id="password" name="password" class="app_form_input inp_password" placeholder="Enter your password">
+                    <label for="username" class="jack_form_label">Username</label>
+                    <input type="username" id="username" name="username" class="jack_form_input inp_username" placeholder="Enter your email ID">
+                    <label for="email" class="jack_form_label">Email</label>
+                    <input type="email" id="email" name="email" class="jack_form_input inp_email" placeholder="Enter your email ID">
+                    <label for="password" class="jack_form_label">Password</label>
+                    <input type="password" id="password" name="password" class="jack_form_input inp_password" placeholder="Enter your password">
                 </div>
-                <button type="button" class="app_standard_button" id="signupBtn">Register</button>
+                <button type="button" class="jack_standard_button" id="signupBtn">Register</button>
                 <p class="login_signup_switch_text">Already have an account ? <span id="loginSignupSwitchBtn">Log in</span></p>
             </form>
         </div>
@@ -115,15 +91,18 @@ function renderSignupComponent() {
 
 function renderChatComponent() {
     const markup = `   
-        <div id="app_chat_area">
-            <div class="app_chat_header">
-                Jack
+        <div id="jack_chat_area">
+            <div class="jack_chat_header">
+                <h3 class="jack_chat_header_heading">Jack</h3>
+                <span id="minimizeBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><polyline points="112 184 256 328 400 184" style="stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+                </span>
             </div>
-            <div id="app_chat_messages_container">
+            <div id="jack_chat_messages_container">
             </div>
-            <div class="app_chat_input_container">
-                <div class="app_input_message_wrapper">
-                    <div class="app_input_message_wrapper_text" contentEditable></div>
+            <div class="jack_chat_input_container">
+                <div class="jack_input_message_wrapper">
+                    <div class="jack_input_message_wrapper_text" contentEditable></div>
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" id="sendBtn">
                     <path d="M53.12,199.94l400-151.39a8,8,0,0,1,10.33,10.33l-151.39,400a8,8,0,0,1-15-.34L229.66,292.45a16,16,0,0,0-10.11-10.11L53.46,215A8,8,0,0,1,53.12,199.94Z" style="stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
@@ -138,6 +117,9 @@ function renderChatComponent() {
     const sendBtn = document.getElementById("sendBtn");
     sendBtn.addEventListener("click", handleMessageSubmit);
 
+    const minimizeBtn = document.getElementById("minimizeBtn");
+    minimizeBtn.addEventListener("click", handleMinimize)
+
 }
 
 // **************** Handler functions ****************
@@ -145,8 +127,8 @@ function renderChatComponent() {
 
 function handleLoginSignupSwitch() {
 
-    const loginArea = document.getElementById("app_login_area");
-    const signupArea = document.getElementById("app_signup_area");
+    const loginArea = document.getElementById("jack_login_area");
+    const signupArea = document.getElementById("jack_signup_area");
 
     if(loginArea) {
         removeHTMLElement(loginArea);
@@ -161,6 +143,40 @@ function handleLoginSignupSwitch() {
     }
 
 }
+
+
+function handleMinimize() {
+    
+    const chatArea = document.getElementById("jack_chat_area");
+    chatArea.classList.add("jack_hide");
+
+    rootElement.classList.add("jack_minimized");
+
+    const check = document.getElementById("maximizeBtn");
+    if(!check) {
+        const markup = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" id="maximizeBtn" viewBox="0 0 512 512"><polyline points="112 328 256 184 400 328" style="stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+        `
+        
+        rootElement.insertAdjacentHTML("afterbegin", markup);
+    }
+
+
+    const maximizeBtn = document.getElementById("maximizeBtn");
+    maximizeBtn.addEventListener("click", handleMaximize);
+    
+}
+
+function handleMaximize() {
+    const maximizeBtn = document.getElementById("maximizeBtn");
+    removeHTMLElement(maximizeBtn)
+
+    const chatArea = document.getElementById("jack_chat_area");
+    chatArea.classList.remove("jack_hide");
+
+    rootElement.classList.remove("jack_minimized");
+}
+
 
 async function handleLogin() {
 
@@ -214,8 +230,8 @@ async function handleSignup() {
 
 async function handleMessageSubmit() {
 
-    const message = document.querySelector(".app_input_message_wrapper_text").textContent;
-    const container = document.getElementById("app_chat_messages_container");
+    const message = document.querySelector(".jack_input_message_wrapper_text").textContent;
+    const container = document.getElementById("jack_chat_messages_container");
 
     console.log(message);
 
@@ -225,39 +241,52 @@ async function handleMessageSubmit() {
 
 
     let markup = `
-        <div class="app_chat_message_container">
-            <div class="app_chat_message_box sender_message">
-                <p class="app_chat_message">${message}</p>
+        <div class="jack_chat_message_container">
+            <div class="jack_chat_message_box sender_message">
+                <p class="jack_chat_message">${message}</p>
             </div>
-            <span class="app_chat_message_time sender_time">Now</span>
+            <span class="jack_chat_message_time sender_time">Now</span>
         </div>
 
     `
 
     container.insertAdjacentHTML("beforeend", markup);
 
-
     // TODO : Chat GPT API
+    // const url = `${BASE_API_URL}/api/chat`;
+
+    // let res = await fetch(url, {
+    //     method: "POST",
+    //     headers : {
+    //         "Content-Type" : "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //         "domain" : domain,
+    //         "message" : message
+    //     })
+    // })
+
+    // res = await res.json();
+    // let response = res["message"]
 
     let response = "Yo good question !";
 
     setTimeout(() => {
         markup = `
-            <div class="app_chat_message_container">
-                <div class="app_chat_message_box">
-                    <p class="app_chat_message">${response}</p>
+            <div class="jack_chat_message_container">
+                <div class="jack_chat_message_box">
+                    <p class="jack_chat_message">${response}</p>
                 </div>
-                <span class="app_chat_message_time">Now</span>
+                <span class="jack_chat_message_time">Now</span>
             </div>
         `;
     
         container.insertAdjacentHTML("beforeend", markup);
     }, 2500)
 
-    container.scrollTo({
-        top: container.scrollHeight,
-        behaviour: "smooth"
-    })
+    container.scrollTo(0, container.scrollHeight);
+
+    
 
     return;
 

@@ -134,7 +134,7 @@ svg > * {
   
 }
 
-.app {
+#app {
   width: 32rem;
   height: 52rem;
   background-color: var(--app-color-white);
@@ -306,6 +306,26 @@ svg > * {
 .app_standard_button:active {
   transform: scale(1) !important;
 }
+
+.login_signup_switch_text {
+  font-size: 1.2rem;
+  color: var(--app-color-grey);
+}
+
+#loginSignupSwitchBtn {
+  color: var(--app-color-black);
+  cursor: pointer;
+  transition: var(--app-default-transition);
+}
+
+#loginSignupSwitchBtn:hover {
+  transform: scale(1.05);
+}
+
+#loginSignupSwitchBtn:active {
+  transform: scale(1) !important;
+}
+
 
 .hide {
   display: none;

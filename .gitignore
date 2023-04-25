@@ -38,6 +38,7 @@ coverage
 .sass-cache
 connect.lock
 typings
+debug
 
 # Logs
 logs

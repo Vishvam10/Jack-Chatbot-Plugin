@@ -18,8 +18,8 @@ const UserSchema = new Schema({
   chatData: [{
     domain: String,
     chats: [{
-      prompt: String,
-      response: String
+      role: String,
+      content: String
     }]
   }]
 });

@@ -1,6 +1,7 @@
-var rootElement;
-var BASE_API_URL
+var BASE_API_URL;
 
+var rootElement;
+var messages_history = [];
 
 function init() {
 
@@ -33,7 +34,7 @@ function renderLoginComponent() {
     const markup = `
         <div id="jack_login_area">
             <form id="userLoginForm" class="login_signup_form">
-                <h3>Login</h3>
+                <h3 class="jack_h3">Login</h3>
                 <div>
                     <label for="email" class="jack_form_label">Email</label>
                     <input type="email" id="email"  name="email" class="jack_form_input inp_email" placeholder="Enter your email ID">
@@ -46,25 +47,20 @@ function renderLoginComponent() {
         </div>
     `
 
-    console.log("reached1")
     rootElement.insertAdjacentHTML("afterbegin", markup);
-    console.log("reached2")
 
     const loginBtn = document.getElementById("loginBtn");
     const loginSignupSwitchBtn = document.getElementById("loginSignupSwitchBtn");
 
     loginBtn.addEventListener("click", handleLogin);
     loginSignupSwitchBtn.addEventListener("click", handleLoginSignupSwitch);
-
-    console.log("reached")
-
 }
 
 function renderSignupComponent() {
     const markup = `
         <div id="jack_signup_area">
             <form id="userSignupForm">
-                <h3>Sign Up</h3>
+                <h3 class="jack_h3">Sign Up</h3>
                 <div>
                     <label for="username" class="jack_form_label">Username</label>
                     <input type="username" id="username" name="username" class="jack_form_input inp_username" placeholder="Enter your email ID">
@@ -144,7 +140,6 @@ function handleLoginSignupSwitch() {
 
 }
 
-
 function handleMinimize() {
     
     const chatArea = document.getElementById("jack_chat_area");
@@ -177,7 +172,6 @@ function handleMaximize() {
     rootElement.classList.remove("jack_minimized");
 }
 
-
 async function handleLogin() {
 
     const email = rootElement.querySelector(".inp_email").value;
@@ -209,6 +203,11 @@ async function handleLogin() {
         return;
     } else {
         localStorage.setItem("jack_auth_token", res.token);
+        const loginArea = document.getElementById("jack_login_area");
+        removeHTMLElement(loginArea);
+
+        renderChatComponent();
+
     }
 }
 
@@ -223,19 +222,55 @@ async function handleSignup() {
 
     const url = `${BASE_API_URL}/auth/register`;
 
-    console.log(username, password, email, url)
+    let res = await fetch(url, {
+        method: "POST",
+        headers : {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            "username" : username,
+            "email" : email,
+            "password" : password
+        })
+    })
 
+    res = await res.json();
+    console.log(res);
+    if(res.status == 201) {
+        handleLoginSignupSwitch()
+    }
     
 }
 
 async function handleMessageSubmit() {
 
-    const message = document.querySelector(".jack_input_message_wrapper_text").textContent;
+    setTimeout(() => {
+        markup = `
+            <div class="jack_chat_message_container" id="loadingResponse">
+                <div class="jack_chat_message_box">
+                    <p class="jack_chat_message">....</p>
+                </div>
+                <span class="jack_chat_message_time">Now</span>
+            </div>
+        `;
+    
+        container.insertAdjacentHTML("beforeend", markup);
+    }, 1500)
+
+    const inp = document.querySelector(".jack_input_message_wrapper_text")
+    const prompt = inp.textContent;
+    const domain = window.location.hostname;
+    const token = localStorage.getItem("jack_auth_token");
+
+    inp.textContent = "";
+
+    console.log("domain : ", domain)
+
     const container = document.getElementById("jack_chat_messages_container");
 
-    console.log(message);
+    console.log(prompt);
 
-    if(message == "") {
+    if(prompt == "") {
         return;
     }
 
@@ -243,7 +278,7 @@ async function handleMessageSubmit() {
     let markup = `
         <div class="jack_chat_message_container">
             <div class="jack_chat_message_box sender_message">
-                <p class="jack_chat_message">${message}</p>
+                <p class="jack_chat_message">${prompt}</p>
             </div>
             <span class="jack_chat_message_time sender_time">Now</span>
         </div>
@@ -253,25 +288,34 @@ async function handleMessageSubmit() {
     container.insertAdjacentHTML("beforeend", markup);
 
     // TODO : Chat GPT API
-    // const url = `${BASE_API_URL}/api/chat`;
+    const url = `${BASE_API_URL}/chat`;
 
-    // let res = await fetch(url, {
-    //     method: "POST",
-    //     headers : {
-    //         "Content-Type" : "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //         "domain" : domain,
-    //         "message" : message
-    //     })
-    // })
+    messages_history.push({ role: "user", content: prompt })
 
-    // res = await res.json();
-    // let response = res["message"]
+    let res = await fetch(url, {
+        method: "POST",
+        headers : {
+            "Content-Type" : "application/json",
+            "Authorization" : `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            "domain" : domain,
+            "messages" : messages_history
+        })
+    })
 
-    let response = "Yo good question !";
+    res = await res.json();
+    console.log(res);
+    let response = res.data.content;
 
+    messages_history.push({ role: "assistant", content: response });
+
+    
     setTimeout(() => {
+        const check = document.getElementById("loadingResponse");
+        if(check) {
+            removeHTMLElement(check);
+        }
         markup = `
             <div class="jack_chat_message_container">
                 <div class="jack_chat_message_box">
@@ -282,11 +326,10 @@ async function handleMessageSubmit() {
         `;
     
         container.insertAdjacentHTML("beforeend", markup);
-    }, 2500)
+        container.scrollTo(0, container.scrollHeight);
+    }, 1500)
 
-    container.scrollTo(0, container.scrollHeight);
 
-    
 
     return;
 

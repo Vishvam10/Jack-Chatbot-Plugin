@@ -1,57 +1,63 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const User = require("../models/User")
+const { Configuration, OpenAIApi } = require("openai");
 
-const responses = [
-    'Yes, definitely.',
-    'It is decidedly so.',
-    'Without a doubt.',
-    'Most likely.',
-    'Outlook good.',
-    'Reply hazy, try again.',
-    'Better not tell you now.',
-    'Cannot predict now.',
-    'Don\'t count on it.',
-    'Outlook not so good.'
-  ];
+const openai = new OpenAIApi(new Configuration({
+    apiKey: process.env.OPENAI_API_KEY
+}))
   
-
 router.post("/", async (req, res) => {
     const token = req.headers.authorization.split("Bearer")[2].trim();
     const domain = req.body.domain;
-    const prompt = req.body.prompt;
+    let messages = req.body.messages;
 
     const decodedToken = jwt.decode(token);
     const userid = decodedToken.id;
 
-    if(prompt == "" || domain == "") {
+    if(domain == "") {
         return res.status(400).json({ error: "Prompt or domain is empty" });
     }
 
-    const randomIndex = Math.floor(Math.random() * responses.length);
-    const response = responses[randomIndex];
+    const systemPrompt = `You are Jack, an enthusiastic, and an accurate chatbot. You will answer subsequent questions that are related to this domain : ${domain} only. Please refrain from answering any other questions. Do not answer any questions that are not related to `
+   
+   
+    messages = [
+        { role: "system", content: systemPrompt },
+        ...messages
+    ]
 
+    let response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: messages
+    })
+
+    const currentMessage = messages[messages.length-1];    
+    
     try {
-
+        response = response.data.choices[0].message;
+        console.log(response)
+        res.status(200).json({data: response})
         const user = await User.findById(userid);
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ error: "User not found" });
         }
         
         // Check if chat data for domain already exists
-        let chatDataIndex = user.chatData.findIndex((chatData) => chatData.domain === domain);
-        if (chatDataIndex === -1) {
+        let ind = user.chatData.findIndex((chatData) => chatData.domain === domain);
+        if (ind === -1) {
             user.chatData.push({ domain, chats: [] }); 
         }
-        
-        chatDataIndex = user.chatData.findIndex((chatData) => chatData.domain === domain);
-        user.chatData[chatDataIndex].chats.push({ prompt, response });
+
+     
+        ind = user.chatData.findIndex((chatData) => chatData.domain === domain);
+        user.chatData[ind].chats.push(currentMessage);
         
         await user.save();
-        res.json(user);
 
     } catch (error) {
         console.error(error);

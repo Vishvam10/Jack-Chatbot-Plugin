@@ -126,7 +126,7 @@
 
 .jack_chat_message_box {
     background-color: var(--jack-default-background) !important;
-    padding: 0px 10px 0px 10px !important;
+    padding: 10px 6px 10px 11px !important;
     border-radius: 12px !important;
     border: var(--jack-default-border) !important;
     color: #646b72 !important;
@@ -289,9 +289,14 @@
     transform: scale(1) !important;
 }
 
+.jack_h3 {
+    font-size: 32px !important;
+}
+
 .jack_hide {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
 }
+

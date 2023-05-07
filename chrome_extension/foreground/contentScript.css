@@ -60,8 +60,8 @@
 }
 
 #jack_app {
-    width: 320px;
-    height: 520px;  
+    width: 440px;
+    height: 550px;  
     background-color: var(--jack-color-white) !important;
     box-shadow: var(--jack-default-box-shadow) !important;
     position: absolute !important;

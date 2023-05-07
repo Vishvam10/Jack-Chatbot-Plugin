@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
         return res.status(400).json({ error: "Prompt or domain is empty" });
     }
 
-    const systemPrompt = `You are Jack, an enthusiastic, and an accurate chatbot. You will answer subsequent questions that are related to this domain : ${domain} only. Please refrain from answering any other questions. Do not answer any questions that are not related to `
+    const systemPrompt = `You are Jack, an enthusiastic, and an accurate chatbot. You will answer subsequent questions that are related to this domain : ${domain} only. Please refrain from answering any other questions. Do not answer any questions that are not related to ${domain}. Answer in 100 words or less unless specified otherwise.`
    
    
     messages = [
@@ -71,6 +71,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/history/:domain", async (req, res) => {
+    console.log("token : ", req.headers.authorization)
     const token = req.headers.authorization.split("Bearer")[1].trim();
     const domain = req.params.domain;
 
@@ -92,6 +93,39 @@ router.get("/history/:domain", async (req, res) => {
         } else {
             let chats = user.chatData[ind].chats;
             res.status(200).json({ data: chats })
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+
+});
+
+router.delete("/history/:domain", async (req, res) => {
+    const token = req.headers.authorization.split("Bearer")[1].trim();
+    const domain = req.params.domain;
+
+    const decodedToken = jwt.decode(token);
+    const userid = decodedToken.id;
+    
+    try {
+       
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        
+        // Check if chat data for domain already exists
+        let ind = user.chatData.findIndex((chatData) => chatData.domain === domain);    
+
+        if(ind == -1) {
+            res.status(200).json({ message: "No chats found" })
+        } else {
+            user.chatData[ind].chats = [];
+            await user.save();
+
+            res.status(200).json({ message: "Chats deleted" })
         }
 
     } catch (error) {

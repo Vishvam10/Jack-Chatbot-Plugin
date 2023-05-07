@@ -66,7 +66,7 @@
     box-shadow: var(--jack-default-box-shadow) !important;
     position: absolute !important;
     bottom: 40px !important;
-    left: 40px !important;
+    right: 40px !important;
     border-radius: 12px !important;
     padding: 20px !important;
     z-index: 10000000000 !important;

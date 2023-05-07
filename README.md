@@ -17,14 +17,16 @@ This is a chrome extension that provides a powerful AI chatbot to talk to. It le
 
 - [x] Session based login
 
-- [ ] Hisory automatically populates
+- [x] Hisory automatically populates
 
-- [ ] Chat segregation into user and gpt prompts with bubbled style
+- [x] Doc to right by default
 
 - [ ] Minimization and pop up at start
 
-- [ ] Resizeable and doc to right by default
+- [x] Restrict all prompt output to less than 100 words unless otherwise specified
 
-- [ ] Restrict all prompt output to less than 100 words unless otherwise specified
+- [x] Enter to send and shift + enter for /n
 
-- [ ] Enter to send and shift + enter for /n
+# Optional
+
+- [ ] Resizable container

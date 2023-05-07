@@ -85,6 +85,10 @@ function renderSignupComponent() {
 }
 
 function renderChatComponent() {
+
+    const check = document.getElementById("jack_chat_area");
+    removeHTMLElement(check)
+
     const markup = `   
         <div id="jack_chat_area">
             <div class="jack_chat_header">
@@ -121,11 +125,11 @@ function renderChatComponent() {
 
     const inpArea = document.querySelector('.jack_input_message_wrapper_text');
     inpArea.addEventListener('keypress', (e) => {
-        if(e.shiftKey) {
-            console.log("shift")
-            if(e.key === 'Enter') {
-                console.log("shift + enter")
-            } 
+        if(e.shiftKey && e.key == 'Enter') {
+            console.log("shift + enter")
+        } else if(e.key == 'Enter') {
+            console.log("enter");
+            handleMessageSubmit();
         }
     })
 
@@ -135,10 +139,13 @@ function renderChatComponent() {
     const logoutBtn = document.getElementById('logoutBtn');
     logoutBtn.addEventListener('click', handleLogout);
 
+    const deleteHistoryBtn = document.getElementById('deleteHistoryBtn');
+    deleteHistoryBtn.addEventListener("click", handleDeleteHistory)
+
     const minimizeBtn = document.getElementById('minimizeBtn');
     minimizeBtn.addEventListener('click', handleMinimize);
 
-    handlePopulateHistory()
+    handlePopulateHistory();
 
 }
 
@@ -416,6 +423,27 @@ async function handlePopulateHistory() {
     
     return;
 
+}
+
+async function handleDeleteHistory() {
+    const domain = window.location.hostname;
+    let token = await getDataFromStorage('jack_auth_token');
+    token = token['jack_auth_token'];
+
+    const url = `${BASE_API_URL}/chat/history/${domain}`;
+
+    let res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    res = await res.json();
+    messages_history = [];
+
+    renderChatComponent();
 }
 
 // **************** Utility functions ****************

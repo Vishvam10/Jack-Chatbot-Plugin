@@ -60,7 +60,7 @@
 }
 
 #jack_app {
-    width: 440px;
+    width: 400px;
     height: 550px;  
     background-color: var(--jack-color-white) !important;
     box-shadow: var(--jack-default-box-shadow) !important;
@@ -108,8 +108,25 @@
     font-weight: bold !important;
 }
 
-#minimizeBtn {
-    margin: 0px 32px -7px 0px !important;
+.jack_action_container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 30% !important;
+    margin: 4px 30px 0px 0px !important;
+}
+
+#deleteHistoryBtn > svg:hover {
+    stroke: var(--jack-color-danger) !important;
+}
+
+#logoutBtn > svg:hover {
+    stroke: var(--jack-color-primary) !important;
+}
+
+#minimizeBtn > svg:hover {
+    stroke: var(--jack-color-primary) !important;
 }
 
 #jack_chat_messages_container {
@@ -142,7 +159,7 @@
 }
 
 .sender_message {
-    background-color: var(--jack-color-black) !important;
+    background-color: var(--jack-color-primary) !important;
     color: var(--jack-color-white) !important;
     justify-content: right !important;
     /* margin: 10px 10px 0px 60px !important; */

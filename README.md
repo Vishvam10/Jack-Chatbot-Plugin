@@ -2,7 +2,7 @@
 
 <br>
 
-This is a chrome extension that provides a powerful AI chatbot to talk to. It leverages the **OpenAI's Chat API** ( `gpt3.5-turbo` ) and answers questions related to the site that you are currently at. 
+This is a chrome extension that provides a powerful AI chatbot to talk to. It leverages the **OpenAI's Chat API** ( `gpt3.5-turbo` ) and answers questions related to the site that you are currently at.
 
 <br>
 
@@ -13,18 +13,9 @@ This is a chrome extension that provides a powerful AI chatbot to talk to. It le
 
 <br>
 
-# Setup
-
-```
-
-```
-
-<br>
-
 # Todo
 
-
-- [ ] Session based login
+- [x] Session based login
 
 - [ ] Hisory automatically populates
 

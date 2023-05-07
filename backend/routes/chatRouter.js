@@ -12,7 +12,8 @@ const openai = new OpenAIApi(new Configuration({
 }))
   
 router.post("/", async (req, res) => {
-    const token = req.headers.authorization.split("Bearer")[2].trim();
+    console.log("token : ", req.headers.authorization)
+    const token = req.headers.authorization.split("Bearer")[1].trim();
     const domain = req.body.domain;
     let messages = req.body.messages;
 
@@ -41,7 +42,9 @@ router.post("/", async (req, res) => {
     try {
         response = response.data.choices[0].message;
         console.log(response)
-        res.status(200).json({data: response})
+
+        res.status(200).json({data: response});
+
         const user = await User.findById(userid);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -56,8 +59,40 @@ router.post("/", async (req, res) => {
      
         ind = user.chatData.findIndex((chatData) => chatData.domain === domain);
         user.chatData[ind].chats.push(currentMessage);
+        user.chatData[ind].chats.push(response);
         
         await user.save();
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+
+});
+
+router.get("/history/:domain", async (req, res) => {
+    const token = req.headers.authorization.split("Bearer")[1].trim();
+    const domain = req.params.domain;
+
+    const decodedToken = jwt.decode(token);
+    const userid = decodedToken.id;
+    
+    try {
+       
+        const user = await User.findById(userid);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        
+        // Check if chat data for domain already exists
+        let ind = user.chatData.findIndex((chatData) => chatData.domain === domain);    
+
+        if(ind == -1) {
+            res.status(200).json({ data: [] })
+        } else {
+            let chats = user.chatData[ind].chats;
+            res.status(200).json({ data: chats })
+        }
 
     } catch (error) {
         console.error(error);

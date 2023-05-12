@@ -12,7 +12,6 @@ const openai = new OpenAIApi(new Configuration({
 }))
   
 router.post("/", async (req, res) => {
-    console.log("token : ", req.headers.authorization)
     const token = req.headers.authorization.split("Bearer")[1].trim();
     const domain = req.body.domain;
     let messages = req.body.messages;

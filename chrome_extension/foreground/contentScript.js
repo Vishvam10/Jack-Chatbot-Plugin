@@ -87,12 +87,14 @@ function renderSignupComponent() {
 function renderChatComponent() {
 
     const check = document.getElementById("jack_chat_area");
-    removeHTMLElement(check)
+    removeHTMLElement(check);
+
+    const username = "Sample"
 
     const markup = `   
         <div id="jack_chat_area">
             <div class="jack_chat_header">
-                <h3 class="jack_chat_header_heading">Jack</h3>
+                <h3 class="jack_chat_header_heading">Hello, ${username} !</h3>
                 <div class="jack_action_container">
                     <span id="deleteHistoryBtn">
                         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512" style="width: 22px !important; height: 20px !important"><path d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320" style="stroke-linejoin:round;stroke-width:32px"/><line x1="80" y1="112" x2="432" y2="112" style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"/><path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40" style="stroke-linejoin:round;stroke-width:32px"/><line x1="256" y1="176" x2="256" y2="400" style="stroke-linejoin:round;stroke-width:32px"/><line x1="184" y1="176" x2="192" y2="400" style="stroke-linejoin:round;stroke-width:32px"/><line x1="328" y1="176" x2="320" y2="400" style="stroke-linejoin:round;stroke-width:32px"/></svg>
@@ -276,8 +278,8 @@ async function handleSignup() {
 
     res = await res.json();
     console.log(res);
-    if (res.status == 201) {
-        handleLoginSignupSwitch();
+    if ("message" in res) {
+        renderLoginComponent();
     }
 }
 
@@ -293,13 +295,19 @@ async function handleMessageSubmit() {
         `;
 
         container.insertAdjacentHTML('beforeend', loadingMarkup);
+        container.scrollTo(0, container.scrollHeight);
     }, 1500);
 
     const inp = document.querySelector('.jack_input_message_wrapper_text');
     const prompt = inp.textContent;
-    const domain = window.location.hostname;
+    const domain = window.location.href;
+
+    console.log("domain : ", domain)
+
     let token = await getDataFromStorage('jack_auth_token');
     token = token['jack_auth_token']
+
+    const username = "Sample"
 
     inp.textContent = '';
 
@@ -314,7 +322,7 @@ async function handleMessageSubmit() {
             <div class="jack_chat_message_box sender_message">
                 <p class="jack_chat_message">${prompt}</p>
             </div>
-            <span class="jack_chat_message_time sender_time">Now</span>
+            <span class="jack_chat_message_time sender_time">${username}</span>
         </div>
 
     `;
@@ -353,7 +361,7 @@ async function handleMessageSubmit() {
                 <div class="jack_chat_message_box">
                     <p class="jack_chat_message">${response}</p>
                 </div>
-                <span class="jack_chat_message_time">Now</span>
+                <span class="jack_chat_message_time">Jack</span>
             </div>
         `;
 
@@ -487,5 +495,3 @@ async function deleteDataFromStorage(key) {
         console.log('CHROME ERROR : ', e.message);
     }
 }
-
-

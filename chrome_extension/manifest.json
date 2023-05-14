@@ -2,10 +2,7 @@
     "name": "Jack",
     "manifest_version": 3,
     "version": "0.0.1",
-    "description": "Chatbot plugin using ChatGPT",
-    "action": {
-      "default_popup": "./popup/popup.html"
-    },
+    "description": "Chatbot plugin using OpenAI's Chat API",
     "host_permissions": ["*://*/*", "<all_urls>"],
     "permissions": [
       "tabs",
@@ -13,13 +10,13 @@
       "scripting",
       "storage"
     ],
-    "content_scripts" : [
-      {
-        "matches" : ["*://*/*", "<all_urls>"],
-        "js" : [
-          "./foreground/contentScript.js"
-        ],
-        "css" : ["./foreground/contentScript.css"]
-      }
-    ]
+    "action": {
+      "default_title": "Click to show an alert"
+    },
+    "background": {
+      "service_worker": "./background/background.js"
+    },
+    "icons": {
+      "128": "./assets/icons/jack.png"
+    }
 }

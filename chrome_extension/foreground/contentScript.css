@@ -1,5 +1,5 @@
 :root {
-    --jack-color-primary: #5000ffb5 !important;
+    --jack-color-primary: #1ea5ab !important;
 
     --jack-color-success: #5ec576 !important;
     --jack-color-success-darker: #399e66 !important;
@@ -47,6 +47,29 @@
 .ionicon:active {
     transform: scale(1) !important;
 }
+
+.jack_loader_dots {
+    padding: 10px !important;
+    border-radius: 8px !important;
+    color: var(--jack-color-primary) !important;
+    background: none !important;
+    border: 1px solid #fff !important;
+}
+
+.jack_loader_dots:after { 
+    content: "...." !important;
+    width: 100% !important;
+    position:absolute !important;
+    overflow:hidden !important;
+    animation: jack-loader-dots-animation 1s infinite;     
+  }
+  
+@keyframes jack-loader-dots-animation {
+    0%   { width:0.0em; }  
+    50%  { width:1.2em; }      
+    100% { width:0.0em; }    
+}
+  
 
 .jack_chat_input_container {
     display: flex !important;
@@ -130,7 +153,7 @@
 }
 
 #jack_chat_messages_container {
-    height: 340px !important;
+    height: 360px !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     margin: 40px 0px 20px 0px !important;
@@ -156,6 +179,33 @@
     height: auto !important;
     margin: 10px 10px 10px 10px !important;
     font-family: var(--jack-default-sanserif-font) !important;
+}
+
+.jack_notification_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--jack-color-success);
+    border-radius: 8px;
+    margin: 60px 10px 10px 10px !important;
+    color: var(--jack-color-white) !important;
+    font-weight: bold !important;
+    height: 44px !important;
+}
+
+.jack_notification_message {
+    font-size: 16px !important;
+    width: inherit !important;
+}
+
+.jack_success {
+    background-color: var(--jack-color-success);
+    color: var(--jack-color-white) !important;
+}
+
+.jack_failure {
+    background-color: var(--jack-color-danger);
+    color: var(--jack-color-white) !important;
 }
 
 .sender_message {
@@ -253,7 +303,7 @@
     appearance: none !important;
     height: 32px !important;
     width: 90% !important;
-    margin: 10px 0px 10px 0px !important;
+    margin: 12px 0px 12px 0px !important;
     border-radius: 6px !important;
     background-color: var(--jack-color-white) !important;
     border: 1px solid var(--jack-color-grey-light-1) !important;
@@ -287,6 +337,7 @@
 
 .login_signup_switch_text {
     font-size: 12px !important;
+    margin: 20px 0px 0px 0px !important;
     color: var(--jack-color-grey) !important;
     font-family: var(--jack-default-sanserif-font) !important;
 }

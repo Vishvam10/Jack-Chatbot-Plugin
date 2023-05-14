@@ -1,4 +1,6 @@
 var BASE_API_URL;
+var CURRENT_DOMAIN;
+var ENCODED_CURRENT_DOMAIN;
 
 var rootElement;
 var messages_history = [];
@@ -7,20 +9,26 @@ var messages_history = [];
     console.log('init ...');
 
     BASE_API_URL = 'http://127.0.0.1:5000/api';
-
+    CURRENT_DOMAIN = window.location.href;
+    ENCODED_CURRENT_DOMAIN = encodeURIComponent(CURRENT_DOMAIN);
+        
     rootElement = document.createElement('div');
     rootElement.id = 'jack_app';
     document.body.appendChild(rootElement);
 
     console.log('DOM check : ', rootElement);
+    console.log('Domain check : ', CURRENT_DOMAIN);
+    console.log('Encoded domain check : ', ENCODED_CURRENT_DOMAIN);
 
     let token  = await getDataFromStorage('jack_auth_token');
     token = token['jack_auth_token'];
 
-    if (token) {
-        renderChatComponent();
-    } else {
+    console.log("Initial token check : ", token, token == "")
+    
+    if (token === undefined) {
         renderLoginComponent();
+    } else {
+        renderChatComponent();
     }
 })()
 
@@ -84,12 +92,13 @@ function renderSignupComponent() {
     loginSignupSwitchBtn.addEventListener('click', handleLoginSignupSwitch);
 }
 
-function renderChatComponent() {
+async function renderChatComponent() {
 
     const check = document.getElementById("jack_chat_area");
     removeHTMLElement(check);
 
-    const username = "Sample"
+    let username = await getDataFromStorage("jack_auth_username");
+    username = username["jack_auth_username"];
 
     const markup = `   
         <div id="jack_chat_area">
@@ -151,6 +160,32 @@ function renderChatComponent() {
 
 }
 
+function renderAlert(type, message, duration=1500) {
+    let markup;
+
+    if(type == "success") {
+        markup = `
+            <div class="jack_notification_container jack_success">
+                <p class="jack_notification_message">${message}</p>
+            </div>
+        `
+    } else {
+        markup = `
+            <div class="jack_notification_container jack_failure">
+                <p class="jack_notification_message">${message}</p>
+            </div>
+        `
+    }
+
+    rootElement.insertAdjacentHTML("afterbegin", markup);
+    setTimeout(() => {
+        const check = document.querySelector(".jack_notification_container");
+        removeHTMLElement(check);
+    }, duration)
+    
+    return markup;
+}
+
 // **************** Handler functions ****************
 
 function handleLoginSignupSwitch() {
@@ -204,43 +239,57 @@ async function handleLogin() {
     const password = rootElement.querySelector('.inp_password').value;
 
     if (email == '' || password == '') {
+        renderAlert("failure", "Invalid email or password !")
         return;
     }
 
-    const url = `${BASE_API_URL}/auth/login`;
+    try {
+        const url = `${BASE_API_URL}/auth/login`;
+    
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+    
+        res = await res.json();
+    
+        console.log("res : ", res)
 
-    console.log(email, password, url);
-
-    let res = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email: email,
-            password: password
-        })
-    });
-
-    res = await res.json();
-
-    if ('error' in res) {
-        console.log('login failed : ', res.error);
+        if ('error' in res) {
+            renderAlert("failure", "Try again ! Login failed");
+            return;
+        } else {
+    
+            setDataToStorage('jack_auth_token', res.token)
+            setDataToStorage('jack_auth_username', res.username)
+    
+            const loginArea = document.getElementById('jack_login_area');
+            removeHTMLElement(loginArea);
+            
+            const signupArea = document.getElementById('jack_signup_area');
+            removeHTMLElement(signupArea);
+    
+            handlePopulateHistory()
+            
+            renderChatComponent();
+        }
+    } catch(e) {
+        renderAlert("failure", "Try again ! Login failed");
         return;
-    } else {
-
-        setDataToStorage('jack_auth_token', res.token)
-
-        const loginArea = document.getElementById('jack_login_area');
-        removeHTMLElement(loginArea);
-        
-        renderChatComponent();
     }
+
 }
 
 function handleLogout() {
 
     deleteDataFromStorage('jack_auth_token');
+    deleteDataFromStorage('jack_auth_username');
     
     const chatArea = document.getElementById("jack_chat_area");
     removeHTMLElement(chatArea);
@@ -262,28 +311,41 @@ async function handleSignup() {
         return;
     }
 
-    const url = `${BASE_API_URL}/auth/register`;
-
-    let res = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password
-        })
-    });
-
-    res = await res.json();
-    console.log(res);
-    if ("message" in res) {
-        renderLoginComponent();
+    try {
+        const url = `${BASE_API_URL}/auth/register`;
+    
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })
+        });
+    
+        res = await res.json();
+        console.log(res);
+        if ("message" in res) {    
+            const signupArea = document.getElementById('jack_signup_area');
+            removeHTMLElement(signupArea);
+            renderLoginComponent();
+        } else {
+            renderAlert("failure", "Try again ! Signup failed");
+            return;
+        }
+    } catch(e) {
+        renderAlert("failure", "Try again ! Signup failed");
+        return;
     }
+
 }
 
 async function handleMessageSubmit() {
+    const container = document.getElementById('jack_chat_messages_container');
+
     setTimeout(() => {
         const loadingMarkup = `
             <div class="jack_chat_message_container" id="loadingResponse">
@@ -300,18 +362,14 @@ async function handleMessageSubmit() {
 
     const inp = document.querySelector('.jack_input_message_wrapper_text');
     const prompt = inp.textContent;
-    const domain = window.location.href;
-
-    console.log("domain : ", domain)
 
     let token = await getDataFromStorage('jack_auth_token');
     token = token['jack_auth_token']
 
-    const username = "Sample"
+    let username = await getDataFromStorage("jack_auth_username")
+    username = username["jack_auth_username"]
 
     inp.textContent = '';
-
-    const container = document.getElementById('jack_chat_messages_container');
 
     if (prompt == '') {
         return;
@@ -340,22 +398,21 @@ async function handleMessageSubmit() {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-            domain: domain,
+            domain: CURRENT_DOMAIN,
             messages: messages_history
         })
     });
 
     res = await res.json();
-    console.log(res);
     let response = res.data.content;
 
     messages_history.push({ role: 'assistant', content: response });
 
     setTimeout(() => {
+
         const check = document.getElementById('loadingResponse');
-        if (check) {
-            removeHTMLElement(check);
-        }
+        removeHTMLElement(check)
+
         const assistantMessageMarkup = `
             <div class="jack_chat_message_container">
                 <div class="jack_chat_message_box">
@@ -366,7 +423,7 @@ async function handleMessageSubmit() {
         `;
 
         container.insertAdjacentHTML('beforeend', assistantMessageMarkup);
-        container.scrollTo(0, container.scrollHeight);
+        container.scrollTop = container.scrollHeight;
     }, 1500);
 
     return;
@@ -375,11 +432,10 @@ async function handleMessageSubmit() {
 async function handlePopulateHistory() {
 
     const chatContainer = document.getElementById("jack_chat_messages_container");
-    const domain = window.location.hostname;
-    let token = await getDataFromStorage('jack_auth_token');
-    token = token['jack_auth_token'];
+    let token = await getDataFromStorage("jack_auth_token");
+    token = token["jack_auth_token"];
 
-    const url = `${BASE_API_URL}/chat/history/${domain}`;
+    const url = `${BASE_API_URL}/chat/history/${ENCODED_CURRENT_DOMAIN}`;
 
     let res = await fetch(url, {
         method: 'GET',
@@ -391,7 +447,7 @@ async function handlePopulateHistory() {
 
     res = await res.json();
     let data = res.data;
-    console.log(res, data)
+
     if(data.length > 0) {
         data.forEach((ele) => {
             
@@ -434,11 +490,12 @@ async function handlePopulateHistory() {
 }
 
 async function handleDeleteHistory() {
-    const domain = window.location.hostname;
+    
     let token = await getDataFromStorage('jack_auth_token');
     token = token['jack_auth_token'];
 
-    const url = `${BASE_API_URL}/chat/history/${domain}`;
+
+    const url = `${BASE_API_URL}/chat/history/${ENCODED_CURRENT_DOMAIN}`;
 
     let res = await fetch(url, {
         method: 'DELETE',

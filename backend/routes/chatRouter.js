@@ -70,9 +70,10 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/history/:domain", async (req, res) => {
-    console.log("token : ", req.headers.authorization)
     const token = req.headers.authorization.split("Bearer")[1].trim();
     const domain = req.params.domain;
+
+    console.log("[POST] domain : ", domain)
 
     const decodedToken = jwt.decode(token);
     const userid = decodedToken.id;
@@ -85,12 +86,13 @@ router.get("/history/:domain", async (req, res) => {
         }
         
         // Check if chat data for domain already exists
-        let ind = user.chatData.findIndex((chatData) => chatData.domain === domain);    
+        let ind = user.chatData.findIndex((chatData) => chatData.domain == domain);    
 
         if(ind == -1) {
             res.status(200).json({ data: [] })
         } else {
             let chats = user.chatData[ind].chats;
+            console.log("reached : ", chats, domain)
             res.status(200).json({ data: chats })
         }
 
@@ -104,7 +106,7 @@ router.get("/history/:domain", async (req, res) => {
 router.delete("/history/:domain", async (req, res) => {
     const token = req.headers.authorization.split("Bearer")[1].trim();
     const domain = req.params.domain;
-
+    console.log("[DELETE] domain : ", domain)
     const decodedToken = jwt.decode(token);
     const userid = decodedToken.id;
     

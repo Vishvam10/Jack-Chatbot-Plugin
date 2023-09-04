@@ -2,7 +2,7 @@
 
 <br>
 
-This is a chrome extension that provides a powerful AI chatbot to talk to. It leverages the **OpenAI's Chat API** ( `gpt3.5-turbo` ) and answers questions related to the **site that you are currently at**.
+This is a Chrome extension that provides a powerful AI chatbot to talk to. It leverages the **OpenAI's Chat API** ( `gpt3.5-turbo` ) and answers questions related to the **site that you are currently at**.
 
 <br>
 
@@ -46,7 +46,7 @@ This is a chrome extension that provides a powerful AI chatbot to talk to. It le
 
 7. Click on `Load Unpacked`. A file upload popup would appear. Choose the `chrome_extension` folder
 
-8. Just for the sake of it, update and reload it a couple of times.Now, the extension would have loaded and you are good to go
+8. Just for the sake of it, update and reload it a couple of times. Now, the extension would have loaded and you are good to go
 
 9. Click on the extension icon. This will launch the bot.
 
@@ -54,8 +54,8 @@ This is a chrome extension that provides a powerful AI chatbot to talk to. It le
 
 <br>
 
-- [x] Session based login
-- [x] Hisory automatically populates
+- [x] Session-based login
+- [x] History automatically populates
 - [x] Doc to right by default
 - [x] Restrict all prompt output to less than 100 words unless otherwise specified
-- [x] Enter to send and shift + enter for /n
+- [x] Enter to send and shift + enter for 
